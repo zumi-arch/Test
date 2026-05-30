@@ -1,0 +1,26 @@
+import requests
+from PIL import Image
+from io import BytesIO
+from urllib.parse import quote
+
+# 1. Set your prompt
+prompt = "A magical glowing forest with tiny fairies, cinematic lighting, 8k resolution, fantasy digital art"
+
+# 2. Safely encode the spaces in the text so the URL doesn't break
+encoded_prompt = quote(prompt)
+
+# 3. Use the KEYLESS old endpoint url (image.pollinations.ai)
+url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?model=flux&width=1024&height=1024"
+
+print("Sending anonymous request to Pollinations AI... please wait.")
+
+# 4. Download the image data (No headers needed!)
+response = requests.get(url)
+
+if response.status_code == 200:
+    # 5. Save it as an image file
+    image = Image.open(BytesIO(response.content))
+    image.save("hasil_pollinations.png")
+    print("Success! Your image has been saved as 'hasil_pollinations.png'")
+else:
+    print(f"Failed to get image. Error code: {response.status_code}")
